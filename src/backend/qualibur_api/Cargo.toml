@@ -1,0 +1,12 @@
+[package]
+name = "qualibur_api"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+
+[dependencies.deno_ffi]
+path = "../../../lib/deno_ffi"

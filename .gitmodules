@@ -1,0 +1,3 @@
+[submodule "lib/deno-ffi"]
+	path = lib/deno_ffi
+	url = ../deno-ffi

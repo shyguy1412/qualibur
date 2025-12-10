@@ -1,0 +1,34 @@
+{
+  "version": "0.0.0",
+  "tasks": {
+    "build": {
+      "description": "Build the whole project",
+      "command": "echo 'done'",
+      "dependencies": ["build:api"]
+    },
+    "build:api": {
+      "description": "build the API module",
+      "command": "deno run -A npm:@neon-rs/cli@0.1.82 dist -o src/backend/qualibur_api/index.node --name qualibur-api < cargo.log",
+      "dependencies": ["build:cargo"]
+    },
+    "build:cargo": "TS_DECL_GEN=src/backend/qualibur_api/index.d.ts cargo build --message-format=json-render-diagnostics > cargo.log",
+    "dev": "deno run --allow-ffi --watch src/backend/main.ts --watch target/debug/libdeno_ffi.so",
+    "run": {
+      "command": "deno run --allow-ffi src/backend/main.ts",
+      "dependencies": ["build"]
+    }
+  },
+  "lint": {
+    "rules": {
+      "exclude": []
+    }
+  },
+  "fmt": {
+    "lineWidth": 90,
+    "singleQuote": true,
+    "semiColons": true,
+    "indentWidth": 2
+  },
+  "imports": {
+  }
+}
