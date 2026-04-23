@@ -1,4 +1,4 @@
 [workspace]
-members = [ "lib/deno_ffi", "src/backend/qualibur_api"]
+members = [ "lib/deno_ffi", "src/backend/qualibur_api", "src/backend/qualibur_server"]
 
 resolver = "3"

@@ -1,3 +1,13 @@
 # Qualibur
 
 Qualibur is a fast, hackable, no nonsene CMS and page builder.
+
+All paths get routed to the same page
+the client fetches components based on url path
+this way fast, client side routing can be achieved
+no server side routing
+no server side rendering
+yes static site generation
+
+a builder that compiles a graphically built page to JSX
+JSX can then be added as custom component and manually edited if needed 

@@ -1,34 +1,73 @@
 {
-  "version": "0.0.0",
-  "tasks": {
-    "build": {
-      "description": "Build the whole project",
-      "command": "echo 'done'",
-      "dependencies": ["build:api"]
+    "version": "0.0.0",
+    "exports": {
+        ".": "./mod.ts"
     },
-    "build:api": {
-      "description": "build the API module",
-      "command": "deno run -A npm:@neon-rs/cli@0.1.82 dist -o src/backend/qualibur_api/index.node --name qualibur-api < cargo.log",
-      "dependencies": ["build:cargo"]
+    "tasks": {
+        "build": {
+            "description": "Build the whole project",
+            "command": "echo 'done'",
+            "dependencies": [
+                // "build:api"
+            ]
+        },
+        // "build:api": {
+        //     "description": "build the API module",
+        //     "command": "deno run -A npm:@neon-rs/cli@0.1.82 dist -o src/backend/qualibur_api/index.so --name qualibur-api < cargo.log",
+        //     "dependencies": [
+        //         "build:cargo"
+        //     ]
+        // },
+        "build:cargo": "TS_DECL_GEN=src/backend/qualibur_api/index.d.ts cargo build --message-format=json-render-diagnostics > cargo.log",
+        "dev": "deno run -A --watch=src/backend/qualibur_api/index.so src/main.ts",
+        "run": {
+            "command": "deno run --allow-ffi src/main.ts",
+            "dependencies": [
+                "build"
+            ]
+        },
+        "install": {
+            "command": "deno install -f --global --name qualibur --config ./deno.jsonc mod.ts -A --sloppy-imports"
+        }
     },
-    "build:cargo": "TS_DECL_GEN=src/backend/qualibur_api/index.d.ts cargo build --message-format=json-render-diagnostics > cargo.log",
-    "dev": "deno run --allow-ffi --watch src/backend/main.ts --watch target/debug/libdeno_ffi.so",
-    "run": {
-      "command": "deno run --allow-ffi src/backend/main.ts",
-      "dependencies": ["build"]
+    "lint": {
+        "rules": {
+        }
+    },
+    "fmt": {
+        "indentWidth": 4,
+        "lineWidth": 90,
+        "useTabs": false,
+
+        "semiColons": true,
+        "singleQuote": true,
+        "quoteProps": "asNeeded",
+        "trailingCommas": "onlyMultiLine",
+
+        "newLineKind": "lf",
+        "proseWrap": "preserve",
+
+        "useBraces": "always",
+        "bracePosition": "sameLine",
+        "operatorPosition": "sameLine",
+        "singleBodyPosition": "nextLine",
+        "nextControlFlowPosition": "sameLine",
+
+        "spaceAround": false,
+        "spaceSurroundingProperties": true,
+
+        "typeLiteral.separatorKind": "semiColon",
+
+        "jsx.bracketPosition": "nextLine",
+        "jsx.multiLineParens": "never"
+    },
+    "nodeModulesDir": "auto",
+    "imports": {
+        "@dev/typescript-plugin-css-modules": "npm:typescript-plugin-css-modules@^5.2.0",
+        "@dev/typescript": "npm:typescript@^6.0.3",
+        "@preact/signals": "npm:@preact/signals@^2.9.0",
+        "esbuild": "npm:esbuild@^0.27.1",
+        "normalize.css": "npm:normalize.css@^8.0.1",
+        "preact": "npm:preact@^10.29.1"
     }
-  },
-  "lint": {
-    "rules": {
-      "exclude": []
-    }
-  },
-  "fmt": {
-    "lineWidth": 90,
-    "singleQuote": true,
-    "semiColons": true,
-    "indentWidth": 2
-  },
-  "imports": {
-  }
 }
