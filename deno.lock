@@ -1,12 +1,35 @@
 {
   "version": "5",
   "specifiers": {
+    "jsr:@std/fs@*": "1.0.23",
+    "jsr:@std/internal@^1.0.12": "1.0.13",
+    "jsr:@std/path@^1.1.4": "1.1.4",
     "npm:@preact/signals@^2.9.0": "2.9.0_preact@10.29.1",
     "npm:esbuild@~0.27.1": "0.27.7",
     "npm:normalize.css@^8.0.1": "8.0.1",
+    "npm:preact-render-to-string@^6.6.7": "6.6.7_preact@10.29.1",
+    "npm:preact-root-fragment@~0.3.1": "0.3.1_preact@10.29.1",
     "npm:preact@^10.29.1": "10.29.1",
     "npm:typescript-plugin-css-modules@^5.2.0": "5.2.0_typescript@6.0.3",
     "npm:typescript@^6.0.3": "6.0.3"
+  },
+  "jsr": {
+    "@std/fs@1.0.23": {
+      "integrity": "3ecbae4ce4fee03b180fa710caff36bb5adb66631c46a6460aaad49515565a37",
+      "dependencies": [
+        "jsr:@std/internal",
+        "jsr:@std/path"
+      ]
+    },
+    "@std/internal@1.0.13": {
+      "integrity": "2f9546691d4ac2d32859c82dff284aaeac980ddeca38430d07941e7e288725c0"
+    },
+    "@std/path@1.1.4": {
+      "integrity": "1d2d43f39efb1b42f0b1882a25486647cb851481862dc7313390b2bb044314b5",
+      "dependencies": [
+        "jsr:@std/internal"
+      ]
+    }
   },
   "npm": {
     "@adobe/css-tools@4.3.3": {
@@ -535,6 +558,18 @@
         "source-map-js"
       ]
     },
+    "preact-render-to-string@6.6.7_preact@10.29.1": {
+      "integrity": "sha512-3XdbsX3+vn9dQW+jJI/FsI9rlkgl6dbeUpqLsChak6jp3j3auFqBCkno7VChbMFs5Q8ylBj6DrUkKRwtVN3nvw==",
+      "dependencies": [
+        "preact"
+      ]
+    },
+    "preact-root-fragment@0.3.1_preact@10.29.1": {
+      "integrity": "sha512-Kva0DYwT5U4D54NSp7WzuyWMtIAlqDyZlM+LWKm7z4bO47K8+tOUPn1Ord2qfyETw0Erq109IF7O3ZzUv0kx6A==",
+      "dependencies": [
+        "preact"
+      ]
+    },
     "preact@10.29.1": {
       "integrity": "sha512-gQCLc/vWroE8lIpleXtdJhTFDogTdZG9AjMUpVkDf2iTCNwYNWA+u16dL41TqUDJO4gm2IgrcMv3uTpjd4Pwmg=="
     },
@@ -643,6 +678,8 @@
       "npm:@preact/signals@^2.9.0",
       "npm:esbuild@~0.27.1",
       "npm:normalize.css@^8.0.1",
+      "npm:preact-render-to-string@^6.6.7",
+      "npm:preact-root-fragment@~0.3.1",
       "npm:preact@^10.29.1",
       "npm:typescript-plugin-css-modules@^5.2.0",
       "npm:typescript@^6.0.3"

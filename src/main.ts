@@ -1,17 +1,60 @@
 import { context, Plugin } from 'esbuild';
+import { resolve } from 'node:path';
+import { serve } from './backend/main.ts';
 
-const reloadPlugin: Plugin = {
-    name: 'reloadPlugin',
+const ssgPlugin: Plugin = {
+    name: 'ssgPlugin',
     setup(pluginBuild) {
-        pluginBuild.onLoad({ filter: /.*\.html$/ }, async (opts) => {
-            const file = await Deno.readTextFile(opts.path);
+        pluginBuild.onResolve({ filter: /^(node):/ }, () => ({ external: true }));
+        pluginBuild.onResolve(
+            { filter: /^(data):/ },
+            (opts) =>
+                opts.with.type == 'json' ?
+                    { external: true } :
+                    { path: opts.path, namespace: 'data' },
+        );
+
+        pluginBuild.onResolve({ filter: /@static-site-generator/ }, () => {
             return {
-                contents: file.replace(
-                    '</head>',
-                    "    <script>{const ev = new EventSource('http://localhost:3001/esbuild'); ev.addEventListener('change', () => (ev.close(),location.reload()) )}</script>\n</head>",
-                ),
-                loader: 'copy',
+                path: './src/frontend/pages/ssg.ts',
+                namespace: '@static-site-generator',
             };
+        });
+
+        pluginBuild.onLoad(
+            { filter: /.*/, namespace: 'data' },
+            (opts) => ({
+                contents:
+                    `import data from "${opts.path}" with { type: "json" };export default data;`,
+            }),
+        );
+
+        pluginBuild.onLoad(
+            { filter: /.*/, namespace: '@static-site-generator' },
+            async () => {
+                return {
+                    contents: await Deno.readTextFile('./src/ssg.ts'),
+                    resolveDir: './src',
+                    loader: 'ts',
+                    watchFiles: ['./src/ssg.ts'],
+                };
+            },
+        );
+
+        pluginBuild.onEnd(async (opts) => {
+            await Deno.writeTextFile(
+                pluginBuild.initialOptions.outdir + '/meta.json',
+                JSON.stringify(opts.metafile!),
+            );
+
+            const ssgPath = `${
+                resolve(pluginBuild.initialOptions.outdir!)
+            }/@static-site-generator.js`;
+
+            await Deno.spawn(
+                `deno`,
+                { args: ['-A', ssgPath] },
+            ).status.catch((e) => console.error(e));
         });
     },
 };
@@ -19,29 +62,45 @@ const reloadPlugin: Plugin = {
 const createContext = async () =>
     await context({
         entryPoints: [
-            './src/frontend/index.tsx',
-            './src/frontend/index.html',
             './src/frontend/pages/**/*.tsx',
+            './src/frontend/pages/global.css',
+            './src/frontend/pages/@static-site-generator',
         ],
-        loader: { '.html': 'copy', '.woff2': 'copy' },
-        plugins: [reloadPlugin],
-        outbase: './src/frontend',
+        loader: { '.html': 'file', '.woff2': 'copy' },
+        inject: [
+            '@/ssg-shim',
+            'preact',
+            'preact/hooks',
+            'preact/compat',
+            '@/frontend/base',
+        ],
+        plugins: [
+            ssgPlugin,
+        ],
+        outbase: './src/frontend/pages',
         outdir: './dist',
         bundle: true,
+        metafile: true,
         format: 'esm',
         platform: 'browser',
+        external: ['post.json'],
         alias: {
             react: 'preact/compat',
             'react-dom': 'preact/compat',
             'react-reconciler': 'preact-reconciler',
         },
-        // minify: true,
-        sourcemap: true,
-        chunkNames: '/pages/__chunks/chunk-[hash]',
+        sourcemap: 'inline',
         splitting: true,
+        chunkNames: '/__chunks/chunk-[hash]',
         logLevel: 'info',
     });
 
 const ctx = await createContext();
-ctx.serve({ host: 'localhost', port: 3001, cors: { origin: 'http://localhost:3000' } });
+// ctx.serve({
+//     host: 'localhost',
+//     port: 3000,
+//     servedir: './dist',
+// });
 ctx.watch();
+
+serve();

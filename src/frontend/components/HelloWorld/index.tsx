@@ -1,6 +1,6 @@
 import { h } from 'preact';
 import { useContext, useEffect, useState } from 'preact/hooks';
-import style from './test.module.css';
+import style from './HelloWorld.module.css';
 import { post } from '@/frontend/base';
 
 export default function () {
@@ -23,7 +23,7 @@ export default function () {
             <pre>
                 {JSON.stringify(post.value, null, 2)}
             </pre>
-            <a href='/'>TEST</a>
+            <a href='/test'>TEST</a>
             <br />
             <span>{time}</span>
         </div>

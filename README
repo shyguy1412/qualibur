@@ -10,4 +10,8 @@ no server side rendering
 yes static site generation
 
 a builder that compiles a graphically built page to JSX
-JSX can then be added as custom component and manually edited if needed 
+JSX can then be added as custom component and manually edited if needed
+
+- external oauth provide
+- stable REST specification for server
+- default server uses nosql, but can be swapped with other implementations
