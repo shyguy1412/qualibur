@@ -1,3 +1,6 @@
 [submodule "lib/deno-ffi"]
 	path = lib/deno_ffi
 	url = ../deno-ffi
+[submodule "src/backend/resty"]
+	path = src/backend/resty
+	url = ../resty

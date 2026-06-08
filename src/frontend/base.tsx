@@ -5,25 +5,25 @@ import initialPost from 'post.json' with { type: 'json' };
 
 const navInterceptController = new AbortController();
 
-// if (globalThis.document) {
-//     const ev = new EventSource('http://localhost:3000/esbuild');
-//     ev.addEventListener('change', () => {
-//         ev.close();
-//         navInterceptController.abort();
-//         location.reload();
-//     });
-//     console.log('EVENT SOURCE CREATED');
-// }
+if (globalThis.document) {
+    const ev = new EventSource('http://localhost:3001/esbuild');
+    ev.addEventListener('change', () => {
+        ev.close();
+        navInterceptController.abort();
+        location.reload();
+    });
+    console.log('EVENT SOURCE CREATED');
+}
 
 const formatUrlPath = (path: string) => `${path.replace(/[\/]$/, '')}`;
 const initialPath = formatUrlPath(globalThis.location?.pathname ?? '');
 
 const page = signal(initialPath);
-
 export const post = signal(initialPost);
 
 export function Index({ initialPage }: any) {
     const module = useSignal(initialPage);
+
     useSignalEffect(() => {
         if (!document) {
             return;
@@ -52,22 +52,19 @@ export function Index({ initialPage }: any) {
 
     const inner = JSON.stringify(importmap);
 
-    return <>
-        <html>
-            <head>
-                <link rel='stylesheet' href='/global.css' />
-                <script type='importmap' dangerouslySetInnerHTML={{ __html: inner }}>
-                </script>
-                <script type='module' src='./index.js' defer></script>
-                <title>Qualibur</title>
-            </head>
+    return <html>
+        <head>
+            <link rel='stylesheet' href='/global.css' />
+            <script type='importmap' dangerouslySetInnerHTML={{ __html: inner }} />
+            <script type='module' src='./index.js' defer />
+            <title>Qualibur</title>
+        </head>
 
-            <body>
-                <Page />
-            </body>
-            <Style />
-        </html>
-    </>;
+        <body>
+            <Page />
+        </body>
+        <Style />
+    </html>;
 }
 
 if (globalThis.document) {

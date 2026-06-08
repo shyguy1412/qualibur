@@ -2,7 +2,6 @@
 
 Qualibur is a fast, hackable, no nonsene CMS and page builder.
 
-All paths get routed to the same page
 the client fetches components based on url path
 this way fast, client side routing can be achieved
 no server side routing
@@ -15,3 +14,17 @@ JSX can then be added as custom component and manually edited if needed
 - external oauth provide
 - stable REST specification for server
 - default server uses nosql, but can be swapped with other implementations
+
+on build:
+generate all pages
+generate all posts
+
+a post:
+has some base slug
+uses a template
+
+## Ory services
+
+- kratos for login/register management
+- oathkeeper as proxy
+- hydra ig

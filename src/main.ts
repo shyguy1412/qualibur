@@ -89,18 +89,20 @@ const createContext = async () =>
             'react-dom': 'preact/compat',
             'react-reconciler': 'preact-reconciler',
         },
-        sourcemap: 'inline',
+        minify: true,
         splitting: true,
+        sourcemap: 'linked',
         chunkNames: '/__chunks/chunk-[hash]',
         logLevel: 'info',
     });
 
 const ctx = await createContext();
-// ctx.serve({
-//     host: 'localhost',
-//     port: 3000,
-//     servedir: './dist',
-// });
+ctx.serve({
+    host: 'localhost',
+    port: 3001,
+    servedir: './dist',
+    cors: { origin: ['http://localhost:3000'] },
+});
 ctx.watch();
 
 serve();
