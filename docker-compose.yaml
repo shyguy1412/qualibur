@@ -9,6 +9,16 @@ services:
             - NGINX_PORT=3000
         network_mode: host
 
+    swagger:
+        build:
+            dockerfile: ./Dockerfile
+            context: ./swagger
+        network_mode: host
+        environment:
+            - PORT=8080
+        volumes:
+            - ./swagger:/app
+
     mongodb:
         image: mongo:latest
         restart: always
